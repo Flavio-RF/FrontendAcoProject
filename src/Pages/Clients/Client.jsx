@@ -2,7 +2,7 @@ import axios from "axios";
 import API_URL from "../../utils/config";
 import { getToken } from "../../utils/auth";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function Client() {
   const { id } = useParams();
@@ -55,14 +55,17 @@ function Client() {
                 <div key={job.id}>
                   <h3>trabajos</h3>
                   <ul>
-                    <li>
-                      <p>{job.plague}</p>
-                      <p>{job.date}</p>
-                      <p>{job.observations}</p>
-                      <p>{job.reason}</p>
-                      <p>{job.state}</p>
-                      <p>{job.time}</p>
-                    </li>
+                    <Link key={job.id} to={`/clients/tasks/${job.id}/edit`}>
+                      <li>
+                        <p>Date: {job.date}</p>
+                        <p>Observations: {job.observations}</p>
+                        <p>Plague: {job.plague}</p>
+                        <p>Reason: {job.reason}</p>
+                        <p>State: {job.state}</p>
+                        <p>Time: {job.time}</p>
+                        <br />
+                      </li>
+                    </Link>
                   </ul>
                 </div>
               );
