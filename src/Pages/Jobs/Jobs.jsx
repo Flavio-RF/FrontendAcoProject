@@ -23,6 +23,7 @@ function Jobs() {
     }
     fetchData();
   }, []);
+
   return (
     <div>
       <h2>Jobs</h2>

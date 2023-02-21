@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "../../utils/config";
 import { getToken } from "../../utils/auth";
+import { Link } from "react-router-dom";
 
 function Clients() {
   const [data, setData] = useState(null);
+  console.log(data);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,14 +31,16 @@ function Clients() {
         <div>
           <ul>
             {data.map((item) => (
-              <li key={item.id}>
-                <p>Name: {item.name}</p>
-                <p>Address: {item.address}</p>
-                <p>Zone: {item.zone}</p>
-                <p>Email: {item.email}</p>
-                <p>Mobile: {item.mobile}</p>
-                <p>Phone: {item.phone}</p>
-              </li>
+              <Link key={item.id} to={`/clients/${item.id}/edit`}>
+                <li>
+                  <p>Name: {item.name}</p>
+                  <p>Address: {item.address}</p>
+                  <p>Zone: {item.zone}</p>
+                  <p>Email: {item.email}</p>
+                  <p>Mobile: {item.mobile}</p>
+                  <p>Phone: {item.phone}</p>
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
