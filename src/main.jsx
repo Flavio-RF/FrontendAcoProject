@@ -6,6 +6,8 @@ import ErrorPage from "./utils/error-page";
 import Clients from "./Pages/Clients/Clients";
 import Login from "./Pages/Login/Login";
 import Jobs from "./Pages/Jobs/Jobs";
+import Job from "./Pages/Jobs/Job";
+
 import Home from "./Pages/Home/Home";
 import Client from "./Pages/Clients/Client";
 
@@ -24,8 +26,12 @@ const router = createBrowserRouter([
         element: <Client />,
       },
       {
-        path: "jobs",
+        path: "clients/tasks",
         element: <Jobs />,
+      },
+      {
+        path: "clients/tasks/:id/edit",
+        element: <Job />,
       },
     ],
   },
