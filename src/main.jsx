@@ -7,6 +7,7 @@ import Clients from "./Pages/Clients/Clients";
 import Login from "./Pages/Login/Login";
 import Jobs from "./Pages/Jobs/Jobs";
 import Home from "./Pages/Home/Home";
+import Client from "./Pages/Clients/Client";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "clients",
         element: <Clients />,
+      },
+      {
+        path: "clients/:id/edit",
+        element: <Client />,
       },
       {
         path: "jobs",
