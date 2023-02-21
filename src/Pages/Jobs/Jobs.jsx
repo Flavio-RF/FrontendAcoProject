@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getToken } from "../../utils/auth";
 import API_URL from "../../utils/config";
 
@@ -26,20 +27,22 @@ function Jobs() {
 
   return (
     <div>
-      <h2>Jobs</h2>
+      <h2>Trabajos</h2>
       {data ? (
         <div>
           <ul>
             {data.map((item) => (
-              <li key={item.id}>
-                <p>Date: {item.date}</p>
-                <p>Observations: {item.observations}</p>
-                <p>Plague: {item.plague}</p>
-                <p>Reason: {item.reason}</p>
-                <p>State: {item.state}</p>
-                <p>Time: {item.time}</p>
-                <br />
-              </li>
+              <Link key={item.id} to={`/clients/tasks/${item.id}/edit`}>
+                <li>
+                  <p>Plaga: {item.plague}</p>
+                  <p>Fecha: {item.date}</p>
+                  <p>Observaciones: {item.observations}</p>
+                  <p>Razón: {item.reason}</p>
+                  <p>Estado: {item.state ? "Hecho" : "Pendiente"}</p>
+                  <p>Hora: {item.time}</p>
+                  <br />
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
