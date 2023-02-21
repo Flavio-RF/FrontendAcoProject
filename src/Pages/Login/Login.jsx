@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import API_URL from "../../config";
+import API_URL from "../../utils/config";
 import { saveToken } from "../../utils/auth";
 
 function Login() {
@@ -23,7 +23,7 @@ function Login() {
     event.preventDefault();
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
-      const token = response.data.accessToken;
+      const token = `Bearer ${response.data.accessToken}`;
       if (!token) {
         throw new Error("Token no recibido del servidor");
       } else {
