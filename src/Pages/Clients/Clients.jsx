@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "../../utils/config";
-import { getToken } from "../../utils/auth";
-import { Link } from "react-router-dom";
+import { getToken } from "../../utils/token";
+import ClientsList from "./ClientsList";
 
 function Clients() {
   const [data, setData] = useState(null);
-  console.log(data);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,30 +23,6 @@ function Clients() {
     }
     fetchData();
   }, []);
-  return (
-    <div>
-      <h1>Clients</h1>
-      {data ? (
-        <div>
-          <ul>
-            {data.map((item) => (
-              <Link key={item.id} to={`/clients/${item.id}/edit`}>
-                <li>
-                  <p>Name: {item.name}</p>
-                  <p>Address: {item.address}</p>
-                  <p>Zone: {item.zone}</p>
-                  <p>Email: {item.email}</p>
-                  <p>Mobile: {item.mobile}</p>
-                  <p>Phone: {item.phone}</p>
-                </li>
-              </Link>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p>Loading data...</p>
-      )}
-    </div>
-  );
+  return <ClientsList data={data} setData={setData} />;
 }
 export default Clients;
