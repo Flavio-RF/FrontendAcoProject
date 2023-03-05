@@ -1,6 +1,6 @@
 import axios from "axios";
 import API_URL from "../../utils/config";
-import { getToken } from "../../utils/auth";
+import { getToken } from "../../utils/token";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -19,7 +19,6 @@ function Job() {
     time: "",
     state: "",
   });
-  console.log(formData);
 
   useEffect(() => {
     fetchData();
@@ -45,7 +44,8 @@ function Job() {
     setLoading(false);
   }
 
-  const handleSaveChanges = async () => {
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
     setUpdating(true);
     try {
       const token = getToken();
@@ -61,12 +61,21 @@ function Job() {
     setUpdating(false);
   };
 
-  const handleSwitchDone = () => {
+  const handleSwitchDone = (e) => {
+    e.preventDefault();
     setFormData((prevState) => ({
       ...prevState,
       state: !isDone,
     }));
     setisDone(!isDone);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -76,64 +85,66 @@ function Job() {
       {data && (
         <div>
           <h2>Trabajo</h2>
-          <div key={data.id}>
-            <ul>
-              <li>
-                <p>
-                  Plaga:{" "}
-                  <input
-                    type="text"
-                    name="plague"
-                    value={formData.plague}
-                    onChange={handleSwitchDone}
-                  />
-                </p>
-                <p>
-                  Fecha:{" "}
-                  <input
-                    type="text"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleSwitchDone}
-                  />
-                </p>
-                <p>
-                  Observaciones:{" "}
-                  <input
-                    type="text"
-                    name="observations"
-                    value={formData.observations}
-                    onChange={handleSwitchDone}
-                  />
-                </p>
-                <p>
-                  Razón:{" "}
-                  <input
-                    type="text"
-                    name="reason"
-                    value={formData.reason}
-                    onChange={handleSwitchDone}
-                  />
-                </p>
-                <p>
-                  Estado:
-                  <button onClick={handleSwitchDone}>
-                    {isDone ? "Hecho" : "Pendiente"}
-                  </button>
-                </p>
-                <p>
-                  Hora:{" "}
-                  <input
-                    type="text"
-                    name="time"
-                    value={formData.time}
-                    onChange={handleSwitchDone}
-                  />
-                </p>
-                <button onClick={handleSaveChanges}>Guardar cambios</button>
-              </li>
-            </ul>
-          </div>
+          <form onSubmit={handleSaveChanges}>
+            <div key={data.id}>
+              <ul>
+                <li>
+                  <p>
+                    Plaga:{" "}
+                    <input
+                      type="text"
+                      name="plague"
+                      value={formData.plague}
+                      onChange={handleInputChange}
+                    />
+                  </p>
+                  <p>
+                    Fecha:{" "}
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleInputChange}
+                    />
+                  </p>
+                  <p>
+                    Observaciones:{" "}
+                    <input
+                      type="text"
+                      name="observations"
+                      value={formData.observations}
+                      onChange={handleInputChange}
+                    />
+                  </p>
+                  <p>
+                    Razón:{" "}
+                    <input
+                      type="text"
+                      name="reason"
+                      value={formData.reason}
+                      onChange={handleInputChange}
+                    />
+                  </p>
+                  <p>
+                    Estado:
+                    <button onClick={handleSwitchDone}>
+                      {isDone ? "Hecho" : "Pendiente"}
+                    </button>
+                  </p>
+                  <p>
+                    Hora:{" "}
+                    <input
+                      type="text"
+                      name="time"
+                      value={formData.time}
+                      onChange={handleInputChange}
+                    />
+                  </p>
+                  <button type="">Guardar cambios</button>
+                </li>
+              </ul>
+            </div>
+          </form>
         </div>
       )}
     </div>
