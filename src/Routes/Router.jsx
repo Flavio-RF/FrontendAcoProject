@@ -7,6 +7,7 @@ import Jobs from "../Pages/Jobs/Jobs";
 import Job from "../Pages/Jobs/Job";
 import Home from "../Pages/Home/Home";
 import Client from "../Pages/Clients/Client";
+import NewClient from "../Pages/Clients/NewClient";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "clients/tasks/:id/edit",
         element: <AuthWrapper Component={Job} requiresAuth={true} />,
+      },
+      {
+        path: "clients/create",
+        element: <AuthWrapper Component={NewClient} requiresAuth={true} />,
       },
     ],
   },
