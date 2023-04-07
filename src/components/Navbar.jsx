@@ -10,13 +10,16 @@ function Nav() {
     removeToken();
     navigate("/login");
   };
+
   return (
     <Navbar fixed="top" variant="dark" bg="dark">
       <Container fluid>
         <Navbar.Brand>
           <Link to={"/"}>ACO</Link>
         </Navbar.Brand>
-        <button onClick={handleLogout}>Cerrar sesión</button>
+        <button className="btn btn-danger" onClick={handleLogout}>
+          Cerrar sesión
+        </button>
       </Container>
     </Navbar>
   );
