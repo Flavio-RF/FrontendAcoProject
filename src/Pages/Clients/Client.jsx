@@ -4,6 +4,7 @@ import { getToken } from "../../utils/token";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 function Client() {
   const { id } = useParams();
@@ -11,7 +12,9 @@ function Client() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const [isDone, setisDone] = useState("");
+  const [deleteJobId, setDeleteJobId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -20,6 +23,31 @@ function Client() {
     mobile: "",
     phone: "",
   });
+
+  const handleShowModal = (id) => {
+    setDeleteJobId(id);
+    setShowModal(true);
+  };
+
+  const handleDeleteUser = () => {
+    handleDelete(deleteJobId);
+    setShowModal(false);
+  };
+
+  const handleDelete = async (id) => {
+    setUpdating(true);
+    try {
+      const token = getToken();
+      await axios.delete(`${API_URL}/clients/tasks/${id}/del`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setUpdating(false);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,8 +84,6 @@ function Client() {
             Authorization: `${token}`,
           },
         });
-        console.log(res.data.Jobs);
-
         setClientData(res.data);
         setFormData(res.data);
         setError(false);
@@ -79,7 +105,7 @@ function Client() {
       ) : (
         clientData && (
           <div className="container-fluid text-white">
-            <h2 className="my-3">Cliente: {formData.name}</h2>
+            <h2 className="my-3">Cliente: {clientData.name}</h2>
             <Form onSubmit={handleSubmit} className="col-9">
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridEmail">
@@ -156,25 +182,35 @@ function Client() {
                 </Button>
               </div>
             </Form>
-            {clientData.Jobs &&
-              clientData.Jobs.map((job) => {
-                return (
-                  <div key={job.id}>
-                    <h3 className="my-3">Trabajos</h3>
-                    <div className="table-responsive">
-                      <table className="mb-0 table table-bordered table-dark table-hover">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Observaciones</th>
-                            <th scope="col">Plaga</th>
-                            <th scope="col">Razón</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Hora</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
+            <div className="d-flex justify-content-between my-4">
+              <h3>Trabajos</h3>
+              <div className="me-5">
+                <Link
+                  to={`/clients/${clientData.id}/newtasks`}
+                  className="btn btn-success"
+                >
+                  Agregar nuevo Trabajo
+                </Link>
+              </div>
+            </div>
+            <div>
+              <div className="table-responsive">
+                <table className="table table-bordered table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">Observaciones</th>
+                      <th scope="col">Plaga</th>
+                      <th scope="col">Razón</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Hora</th>
+                      <th className="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  {clientData.Jobs &&
+                    clientData.Jobs.map((job) => {
+                      return (
                         <tbody key={job.id}>
                           <tr>
                             <th scope="row">{job.id}</th>
@@ -182,20 +218,44 @@ function Client() {
                             <td>{job.observations}</td>
                             <td>{job.plague}</td>
                             <td>{job.reason}</td>
-                            <td>{job.state ? "Hecho" : "Pendiente"}</td>
+                            <td>
+                              <div
+                                className={
+                                  job.state
+                                    ? "btn btn-primary btn-sm"
+                                    : "btn btn-danger btn-sm"
+                                }
+                              >
+                                {job.state ? "Hecho" : "Pendiente"}
+                              </div>
+                            </td>
                             <td>{job.time}</td>
                             <td className="text-center">
-                              <Link className="btn btn-secondary btn-sm">
+                              <Link
+                                className="btn btn-secondary btn-sm mx-2"
+                                to={`/clients/tasks/${job.id}/edit`}
+                              >
                                 Editar
                               </Link>
+                              <div
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleShowModal(job.id)}
+                              >
+                                Eliminar
+                              </div>
                             </td>
                           </tr>
                         </tbody>
-                      </table>
-                    </div>
-                  </div>
-                );
-              })}
+                      );
+                    })}
+                </table>
+                <ConfirmDeleteModal
+                  show={showModal}
+                  onHide={() => setShowModal(false)}
+                  onDelete={handleDeleteUser}
+                />
+              </div>
+            </div>
           </div>
         )
       )}

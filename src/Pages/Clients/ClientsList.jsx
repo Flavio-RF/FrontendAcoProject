@@ -19,6 +19,7 @@ function ClientsList({ data, setData }) {
           Authorization: `${token}`,
         },
       });
+      console.log(data);
       setData(data.filter((item) => item.id !== id));
     } catch (error) {
       console.log(error);
@@ -87,7 +88,9 @@ function ClientsList({ data, setData }) {
                 <th scope="col">Email</th>
                 <th scope="col">Celular</th>
                 <th scope="col">Telefono</th>
-                <th scope="col">Acciones</th>
+                <th scope="col" className="text-center">
+                  Acciones
+                </th>
               </tr>
             </thead>
             {filteredData.map((item) => (
