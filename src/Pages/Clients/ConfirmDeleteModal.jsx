@@ -6,7 +6,7 @@ function ConfirmDeleteModal({ show, onHide, onDelete }) {
       <Modal.Header closeButton>
         <Modal.Title>Confirmar eliminación</Modal.Title>
       </Modal.Header>
-      <Modal.Body>¿Estás seguro que deseas eliminar el cliente?</Modal.Body>
+      <Modal.Body>¿Estás seguro que lo deseas eliminar?</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
           Cancelar
